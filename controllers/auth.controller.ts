@@ -1,10 +1,9 @@
-export {};
-
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const config = require("config");
 const { validationResult } = require("express-validator");
-const User = require("../models/User");
+
+const User = require("../models/User.ts");
 
 class AuthController {
   async register(req, res) {
@@ -16,7 +15,7 @@ class AuthController {
           status: 400,
           errors: validationErrors.array(),
           message: "Sent data is not correct",
-        })
+        });
       }
 
       const { email, password } = req.body;
@@ -33,7 +32,6 @@ class AuthController {
       await user.save();
 
       res.json.status(201)({ status: 201, message: "User created" });
-
     } catch (e) {
       res.json.status(500)({ status: 500, message: "Auth controller register error" });
     }
@@ -48,7 +46,7 @@ class AuthController {
           status: 400,
           errors: validationErrors.array(),
           message: "Sent data is not correct",
-        })
+        });
       }
 
       const { email, password } = req.body;
@@ -62,19 +60,14 @@ class AuthController {
       const isPasswordMatch = await bcrypt.compare(password, user.password);
 
       if (!isPasswordMatch) {
-        return res.status(400).json({ status: 400, message: "Incorrect email or password"});
+        return res.status(400).json({ status: 400, message: "Incorrect email or password" });
       }
 
-      const token = jwt.sign(
-        { userId: user.id },
-        config.get("jwtSecret"),
-        { expiresIn: "1h" }
-      )
+      const token = jwt.sign({ userId: user.id }, config.get("jwtSecret"), { expiresIn: "1h" });
 
-      res.status(200).json({ status: 200, token, userId: user.id })
-
+      await res.status(200).json({ status: 200, token, userId: user.id });
     } catch (e) {
-      res.status(500).json({ status: 500, message: "Auth controller login error" });
+      await res.status(500).json({ status: 500, message: "Auth controller login error" });
     }
   }
 }

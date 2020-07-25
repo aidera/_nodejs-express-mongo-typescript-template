@@ -1,8 +1,7 @@
-export {};
-
 const express = require("express");
-const LinkController = require("../controllers/link.controller");
-const authMiddleware = require("../middleware/auth.middleware");
+const LinkController = require("../controllers/link.controller.ts");
+const authMiddleware = require("../middleware/auth.middleware.ts");
+
 const router = express.Router();
 
 router.post("/generate", authMiddleware, LinkController.generate);
