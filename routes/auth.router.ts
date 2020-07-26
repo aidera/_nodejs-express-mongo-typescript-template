@@ -1,3 +1,5 @@
+export {};
+
 const express = require("express");
 const validator = require("../services/validation.ts");
 const AuthController = require("../controllers/auth.controller.ts");

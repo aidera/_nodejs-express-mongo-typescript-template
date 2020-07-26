@@ -1,3 +1,5 @@
+export {};
+
 const jwt = require("jsonwebtoken");
 const config = require("config");
 
@@ -13,8 +15,7 @@ module.exports = (req, res, next) => {
       return res.status(401).json({ status: 401, message: "Not authorized" });
     }
 
-    const decoded = jwt.verify(token, config.get("jwtSecret"));
-    req.user = decoded;
+    req.user = jwt.verify(token, config.get("jwtSecret"));
     next();
   } catch (e) {
     return res.status(401).json({ status: 401, message: "Not authorized" });

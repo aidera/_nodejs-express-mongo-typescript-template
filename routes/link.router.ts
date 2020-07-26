@@ -1,3 +1,5 @@
+export {};
+
 const express = require("express");
 const LinkController = require("../controllers/link.controller.ts");
 const authMiddleware = require("../middleware/auth.middleware.ts");

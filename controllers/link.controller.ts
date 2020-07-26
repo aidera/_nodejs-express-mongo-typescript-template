@@ -1,8 +1,11 @@
+export {};
+
 const Link = require("../models/Link.ts");
 
 class LinkController {
   async generate(req, res) {
     try {
+      console.log("Generated");
     } catch (e) {
       await res.status(500).json({ status: 500, message: "Link controller generate error" });
     }
