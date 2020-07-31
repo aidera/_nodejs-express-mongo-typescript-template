@@ -1,6 +1,4 @@
-export {};
-
-const { body } = require("express-validator");
+import { body } from "express-validator";
 
 const validation = {
   register: [
@@ -27,4 +25,4 @@ const validation = {
   ],
 };
 
-module.exports = validation;
+export default validation;

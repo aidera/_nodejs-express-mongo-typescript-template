@@ -1,16 +1,16 @@
-export {};
+import { Request, Response } from "express";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import config from "../config";
+import { validationResult } from "express-validator";
+import User from "../models/User";
 
-const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
-const config = require("config");
-const { validationResult } = require("express-validator");
-
-const User = require("../models/User.ts");
-
-class AuthController {
-  async register(req, res) {
+const AuthController = {
+  async register(req: Request, res: Response) {
+    console.log("enter register");
     try {
       const validationErrors = validationResult(req);
+      console.log(req.body);
 
       if (!validationErrors.isEmpty()) {
         return res.status(400).json({
@@ -33,13 +33,13 @@ class AuthController {
 
       await user.save();
 
-      res.json.status(201)({ status: 201, message: "User created" });
+      res.json({ status: 201, message: "User created" });
     } catch (e) {
-      res.json.status(500)({ status: 500, message: "Auth controller register error" });
+      res.json({ status: 500, message: "Auth controller register error" });
     }
-  }
+  },
 
-  async login(req, res) {
+  async login(req: Request, res: Response) {
     try {
       const validationErrors = validationResult(req);
 
@@ -65,13 +65,13 @@ class AuthController {
         return res.status(400).json({ status: 400, message: "Incorrect email or password" });
       }
 
-      const token = jwt.sign({ userId: user.id }, config.get("jwtSecret"), { expiresIn: "1h" });
+      const token = jwt.sign({ userId: user.id }, config.jwtSecret, { expiresIn: "1h" });
 
       await res.status(200).json({ status: 200, token, userId: user.id });
     } catch (e) {
       await res.status(500).json({ status: 500, message: "Auth controller login error" });
     }
-  }
-}
+  },
+};
 
-module.exports = new AuthController();
+export default AuthController;
